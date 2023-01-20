@@ -11,7 +11,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "users")
-public class User {
+public class User{
 
     @EqualsAndHashCode.Include
     @Id
@@ -31,4 +31,5 @@ public class User {
     @JoinTable(name = "user_group", joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private List<Group> groups = new ArrayList<>();
+
 }
