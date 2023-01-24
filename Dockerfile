@@ -2,7 +2,9 @@ FROM openjdk:11-jre-slim
 
 WORKDIR /app
 
-COPY target/*.jar /app/food-api.jar
+ARG JAR_FILE
+
+COPY target/${JAR_FILE}.jar /app/food-api.jar
 
 EXPOSE 8080
 
