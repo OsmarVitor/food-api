@@ -1,0 +1,27 @@
+version: "3.9"
+
+networks:
+  foodapi-network:
+    driver: bridge
+
+services:
+  foodapi-postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5432:5432"
+    networks:
+      - foodapi-network
+
+  food-api:
+    image: food-api
+    environment:
+      DB_HOST: foodapi-postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - foodapi-network
+    depends_on:
+      -  foodapi-postgres
+
