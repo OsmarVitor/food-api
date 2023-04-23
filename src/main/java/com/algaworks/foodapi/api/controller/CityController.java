@@ -54,6 +54,5 @@ public class CityController {
     public ResponseEntity<City> delete(@PathVariable Long cityId) {
         cityService.delete(cityId);
         return ResponseEntity.noContent().build();
-
     }
 }
