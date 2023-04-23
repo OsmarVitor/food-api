@@ -43,14 +43,14 @@ public class CityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(citySaved);
     }
 
-    @PutMapping("/{cidadeId}")
+    @PutMapping("/{cityId}")
     public ResponseEntity<?> update(@PathVariable Long cityId,
                                        @RequestBody City city) {
         cityService.update(cityId, city);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{cidadeId}")
+    @DeleteMapping("/{cityId}")
     public ResponseEntity<City> delete(@PathVariable Long cityId) {
         cityService.delete(cityId);
         return ResponseEntity.noContent().build();
