@@ -2,7 +2,7 @@ package com.algaworks.foodapi.api.controller;
 
 import com.algaworks.foodapi.domain.model.City;
 import com.algaworks.foodapi.domain.service.CityService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/cities")
+@RequiredArgsConstructor
 public class CityController {
 
-    @Autowired
-    private CityService cityService;
+    private final CityService cityService;
 
     @GetMapping
     public ResponseEntity<Page<City>> list(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "15") int size
-    ) {
+            @RequestParam(value = "size", defaultValue = "15") int size) {
         return ResponseEntity.status(HttpStatus.OK).body(cityService.list(page, size));
     }
 
@@ -45,7 +44,7 @@ public class CityController {
 
     @PutMapping("/{cityId}")
     public ResponseEntity<?> update(@PathVariable Long cityId,
-                                       @RequestBody City city) {
+                                    @RequestBody City city) {
         cityService.update(cityId, city);
         return ResponseEntity.noContent().build();
     }
