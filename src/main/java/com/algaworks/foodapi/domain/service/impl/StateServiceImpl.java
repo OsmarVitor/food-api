@@ -5,55 +5,55 @@ import com.algaworks.foodapi.domain.exception.EntityNotFoundException;
 import com.algaworks.foodapi.domain.model.State;
 import com.algaworks.foodapi.domain.repository.StateRepository;
 import com.algaworks.foodapi.domain.service.StateService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class StateServiceImpl implements StateService {
 
-    @Autowired
-    private StateRepository stateRepository;
+    private final StateRepository stateRepository;
 
     @Override
-    public Page<State> list(int page, int size) {
+    public Page<State> listStates(int page, int size) {
         return stateRepository.findAll(PageRequest.of(page, size));
     }
 
     @Override
-    public State find(long id) {
-        return findState(id);
+    public State findState(long id) {
+        return findStateById(id);
     }
 
     @Override
-    public State create(State state) {
+    public State createState(State state) {
         return stateRepository.save(state);
     }
 
     @Override
-    public State update(long id, State stateUpdated) {
-        State stateToUpdate = findState(id);
+    public State updateState(long id, State stateUpdated) {
+        State stateToUpdate = findStateById(id);
         BeanUtils.copyProperties(stateUpdated, stateToUpdate, "id");
-        return stateRepository.save(stateUpdated);
+        return stateRepository.save(stateToUpdate);
     }
 
     @Override
-    public void delete(Long stateId) {
-        State stateToDelete = findState(stateId);
+    public void deleteState(Long stateId) {
+        State stateToDelete = findStateById(stateId);
 
         try {
             stateRepository.delete(stateToDelete);
 
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(
-                    String.format("City with id %d cannot be deleted because it is in use", stateId));
+                    String.format("State with id %d cannot be deleted because it is in use", stateId));
         }
     }
 
-    private State findState(long stateId){
+    private State findStateById(long stateId){
         return stateRepository.findById(stateId).orElseThrow(() -> new EntityNotFoundException(stateId));
     }
 

@@ -5,13 +5,13 @@ import org.springframework.data.domain.Page;
 
 public interface StateService {
 
-    State create(State state);
+    State createState(State state);
 
-    State find(long id);
+    State findState(long id);
 
-    State update(long id, State state);
+    State updateState(long id, State state);
 
-    void delete(Long stateId);
+    void deleteState(Long stateId);
 
-    Page<State> list(int page, int size);
+    Page<State> listStates(int page, int size);
 }

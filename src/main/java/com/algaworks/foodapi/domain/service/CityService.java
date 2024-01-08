@@ -5,14 +5,14 @@ import org.springframework.data.domain.Page;
 
 public interface CityService {
 
-    City create(City city);
+    City createCity(City city);
 
-    City find(long id);
+    City findCity(long id);
 
-    City update(long id, City city);
+    City updateCity(long id, City city);
 
-    void delete(Long cityId);
+    void deleteCity(Long cityId);
 
-    Page<City> list(int page, int size);
+    Page<City> listCities(int page, int size);
 
 }

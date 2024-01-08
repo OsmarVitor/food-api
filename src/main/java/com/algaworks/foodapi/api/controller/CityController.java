@@ -23,35 +23,35 @@ public class CityController {
 
     private final CityService cityService;
 
-    @GetMapping
-    public ResponseEntity<Page<City>> list(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "15") int size) {
-        return ResponseEntity.status(HttpStatus.OK).body(cityService.list(page, size));
-    }
-
-    @GetMapping("/{cityId}")
-    public ResponseEntity<City> find(@PathVariable Long cityId) {
-        City city = cityService.find(cityId);
-        return ResponseEntity.ok(city);
-    }
-
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody City city) {
-        City citySaved = cityService.create(city);
+    public ResponseEntity<City> createCity(@RequestBody City city) {
+        City citySaved = cityService.createCity(city);
         return ResponseEntity.status(HttpStatus.CREATED).body(citySaved);
     }
 
+    @GetMapping
+    public ResponseEntity<Page<City>> listCities(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "15") int size) {
+        return ResponseEntity.status(HttpStatus.OK).body(cityService.listCities(page, size));
+    }
+
+    @GetMapping("/{cityId}")
+    public ResponseEntity<City> findCity(@PathVariable Long cityId) {
+        City city = cityService.findCity(cityId);
+        return ResponseEntity.ok(city);
+    }
+
     @PutMapping("/{cityId}")
-    public ResponseEntity<?> update(@PathVariable Long cityId,
-                                    @RequestBody City city) {
-        cityService.update(cityId, city);
+    public ResponseEntity<City> updateCity(@PathVariable Long cityId,
+                                           @RequestBody City city) {
+        cityService.updateCity(cityId, city);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{cityId}")
     public ResponseEntity<City> delete(@PathVariable Long cityId) {
-        cityService.delete(cityId);
+        cityService.deleteCity(cityId);
         return ResponseEntity.noContent().build();
     }
 }

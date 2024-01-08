@@ -7,8 +7,8 @@ import com.algaworks.foodapi.domain.model.State;
 import com.algaworks.foodapi.domain.repository.CityRepository;
 import com.algaworks.foodapi.domain.service.CityService;
 import com.algaworks.foodapi.domain.service.StateService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,29 +17,28 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class CityServiceImpl implements CityService {
 
-    @Autowired
-    private CityRepository cityRepository;
+    private final CityRepository cityRepository;
 
-    @Autowired
-    private StateService stateService;
+    private final StateService stateService;
 
     @Override
-    public Page<City> list(int page, int size) {
+    public Page<City> listCities(int page, int size) {
         return cityRepository.findAll(PageRequest.of(page, size));
     }
 
     @Override
-    public City find(long id) {
-        return findCity(id);
+    public City findCity(long id) {
+        return findCityById(id);
     }
 
     @Override
-    public City create(City city) {
+    public City createCity(City city) {
 
         Long stateId = city.getState().getId();
-        State state = stateService.find(stateId);
+        State state = stateService.findState(stateId);
         if (Objects.isNull(state)) {
             throw new EntityNotFoundException(stateId);
         }
@@ -48,15 +47,15 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public City update(long id, City cityUpdated) {
-        City cityToUpdate = findCity(id);
+    public City updateCity(long id, City cityUpdated) {
+        City cityToUpdate = findCityById(id);
         BeanUtils.copyProperties(cityUpdated, cityToUpdate, "id");
-        return cityRepository.save(cityUpdated);
+        return cityRepository.save(cityToUpdate);
     }
 
     @Override
-    public void delete(Long cityId) {
-        City city = findCity(cityId);
+    public void deleteCity(Long cityId) {
+        City city = findCityById(cityId);
         try {
             cityRepository.delete(city);
         } catch (DataIntegrityViolationException e) {
@@ -65,7 +64,7 @@ public class CityServiceImpl implements CityService {
         }
     }
 
-    private City findCity(long cityId) {
+    private City findCityById(long cityId) {
         return cityRepository.findById(cityId).orElseThrow(() -> new EntityNotFoundException(cityId));
     }
 
