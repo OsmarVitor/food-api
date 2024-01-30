@@ -9,16 +9,15 @@ import javax.persistence.ManyToOne;
 @Data
 @Embeddable
 public class Address {
-
-    private String zipCode;
-
-    private String publicPlace;
+    private String street;
 
     private String number;
 
-    private String complement;
+    private String neighborhood;
 
-    private String district;
+    private String zipCode;
+
+    private String complement;
 
     @ManyToOne
     @JoinColumn(name = "address_city_id")
