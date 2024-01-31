@@ -1,14 +1,21 @@
 package com.algaworks.foodapi.domain.model;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
+@Entity
+@Builder
 @Data
-@Embeddable
 public class Address {
+
+    @Id
+    @EqualsAndHashCode.Include
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String street;
 
     private String number;

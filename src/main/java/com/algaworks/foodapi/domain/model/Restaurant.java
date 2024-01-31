@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,8 +38,9 @@ public class Restaurant {
     @JoinColumn(name = "kitchen_id", nullable = false)
     private Kitchen kitchen;
 
+    @ManyToOne
     @JsonIgnore
-    @Embedded
+    @JoinColumn(nullable = false)
     private Address address;
 
     @JsonIgnore
