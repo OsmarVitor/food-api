@@ -1,18 +1,20 @@
 package com.algaworks.foodapi.domain.service;
 
+import com.algaworks.foodapi.api.controller.request.CityRequest;
+import com.algaworks.foodapi.api.controller.response.CityResponse;
 import com.algaworks.foodapi.domain.model.City;
 import org.springframework.data.domain.Page;
 
 public interface CityService {
 
-    City createCity(City city);
+    CityResponse createCity(CityRequest cityRequest);
 
-    City findCity(long id);
+    CityResponse findCity(long id);
 
-    City updateCity(long id, City city);
+    CityResponse updateCity(long id, City city);
 
     void deleteCity(Long cityId);
 
-    Page<City> listCities(int page, int size);
+    Page<CityResponse> listCities(int page, int size);
 
 }

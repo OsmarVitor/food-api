@@ -1,5 +1,7 @@
 package com.algaworks.foodapi.domain.service.impl;
 
+import com.algaworks.foodapi.api.controller.request.CityRequest;
+import com.algaworks.foodapi.api.controller.response.CityResponse;
 import com.algaworks.foodapi.domain.exception.EntityInUseException;
 import com.algaworks.foodapi.domain.exception.EntityNotFoundException;
 import com.algaworks.foodapi.domain.model.City;
@@ -7,11 +9,11 @@ import com.algaworks.foodapi.domain.model.State;
 import com.algaworks.foodapi.domain.repository.CityRepository;
 import com.algaworks.foodapi.domain.service.CityService;
 import com.algaworks.foodapi.domain.service.StateService;
+import com.algaworks.foodapi.domain.service.converter.CityConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -25,32 +27,32 @@ public class CityServiceImpl implements CityService {
     private final StateService stateService;
 
     @Override
-    public Page<City> listCities(int page, int size) {
-        return cityRepository.findAll(PageRequest.of(page, size));
+    public Page<CityResponse> listCities(int page, int size) {
+        return cityRepository.findAll(PageRequest.of(page, size)).map(city -> CityConverter.cityToResponse(city, city.getState()));
     }
 
     @Override
-    public City findCity(long id) {
-        return findCityById(id);
+    public CityResponse findCity(long id) {
+        City city = findCityById(id);
+        return CityConverter.cityToResponse(city, city.getState());
     }
 
     @Override
-    public City createCity(City city) {
-
-        Long stateId = city.getState().getId();
-        State state = stateService.findState(stateId);
+    public CityResponse createCity(CityRequest cityRequest) {
+        State state = stateService.findState(cityRequest.getStateId());
         if (Objects.isNull(state)) {
-            throw new EntityNotFoundException(stateId);
+            throw new EntityNotFoundException(cityRequest.getStateId());
         }
+        City city = City.builder().name(cityRequest.getName()).build();
         city.setState(state);
-        return cityRepository.save(city);
+        return CityConverter.cityToResponse(cityRepository.save(city), state);
     }
 
     @Override
-    public City updateCity(long id, City cityUpdated) {
+    public CityResponse updateCity(long id, City cityUpdated) {
         City cityToUpdate = findCityById(id);
         BeanUtils.copyProperties(cityUpdated, cityToUpdate, "id");
-        return cityRepository.save(cityToUpdate);
+        return CityConverter.cityToResponse(cityRepository.save(cityToUpdate), cityToUpdate.getState());
     }
 
     @Override
