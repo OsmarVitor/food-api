@@ -1,5 +1,7 @@
 package com.algaworks.foodapi.api.controller;
 
+import com.algaworks.foodapi.api.controller.request.CityRequest;
+import com.algaworks.foodapi.api.controller.response.CityResponse;
 import com.algaworks.foodapi.domain.model.City;
 import com.algaworks.foodapi.domain.service.CityService;
 import lombok.RequiredArgsConstructor;
@@ -24,27 +26,26 @@ public class CityController {
     private final CityService cityService;
 
     @PostMapping
-    public ResponseEntity<City> createCity(@RequestBody City city) {
-        City citySaved = cityService.createCity(city);
-        return ResponseEntity.status(HttpStatus.CREATED).body(citySaved);
+    public ResponseEntity<CityResponse> createCity(@RequestBody CityRequest cityRequest) {
+        CityResponse cityResponse = cityService.createCity(cityRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cityResponse);
     }
 
     @GetMapping
-    public ResponseEntity<Page<City>> listCities(
+    public ResponseEntity<Page<CityResponse>> listCities(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "15") int size) {
         return ResponseEntity.status(HttpStatus.OK).body(cityService.listCities(page, size));
     }
 
     @GetMapping("/{cityId}")
-    public ResponseEntity<City> findCity(@PathVariable Long cityId) {
-        City city = cityService.findCity(cityId);
-        return ResponseEntity.ok(city);
+    public ResponseEntity<CityResponse> findCity(@PathVariable Long cityId) {
+        return ResponseEntity.ok(cityService.findCity(cityId));
     }
 
     @PutMapping("/{cityId}")
-    public ResponseEntity<City> updateCity(@PathVariable Long cityId,
-                                           @RequestBody City city) {
+    public ResponseEntity<CityResponse> updateCity(@PathVariable Long cityId,
+                                                   @RequestBody City city) {
         cityService.updateCity(cityId, city);
         return ResponseEntity.noContent().build();
     }
